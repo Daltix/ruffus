@@ -891,9 +891,11 @@ class Pipeline(dict):
         # add self to list of all pipelines
         self.name = name
         self.original_name = name
+        self.logger = logging.getLogger(__name__)
         if name in Pipeline.pipelines:
-            raise Exception("Error:\nDuplicate pipeline. "
-                            "A pipeline named '%s' already exists.\n" % name)
+            # TODO: provide an option to fail
+            self.logger.warning('Overwriting pipeline {name}'.format(name=name))
+            del Pipeline.pipelines[name]
         Pipeline.pipelines[name] = self
         self.head_tasks = []
         self.tail_tasks = []
